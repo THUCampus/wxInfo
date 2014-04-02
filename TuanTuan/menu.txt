@@ -1,0 +1,59 @@
+{
+    "button": [
+        {
+            "name": "信息查询", 
+            "sub_button": [
+                {
+                    "type": "click", 
+                    "name": "热门活动", 
+                    "key": "V1001_TODAT_ACTIVE"
+                }, 
+                {
+                    "type": "click", 
+                    "name": "近期讲座", 
+                    "key": "V1001_TODAT_LECTURE"
+                },
+                {
+                    "type": "click", 
+                    "name": "校园新闻", 
+                    "key": "V1001_SCHOOL_NEWS"
+                },
+                {
+                    "type": "click",
+                    "name": "社团&部门",
+                    "key": "V1001_OGNIZATION"
+                }
+            ]
+        }, 
+        {
+            "type": "click", 
+            "name": "校园吐槽", 
+            "key": "V1001_THU_TUCAO"
+        }, 
+        {
+            "name": "菜单", 
+            "sub_button": [
+                {
+                    "type": "click",
+                    "name": "账号绑定", 
+                    "key": "V1001_LOGIN"
+                }, 
+                {
+                    "type": "click", 
+                    "name": "取消绑定", 
+                    "key": "V1001_CANCEL_BIND"
+                }, 
+                {
+                    "type": "click", 
+                    "name": "使用帮助", 
+                    "key": "V1001_HELP"
+                }, 
+                {
+                    "type": "click", 
+                    "name": "关于我们", 
+                    "key": "V1001_ABOUT_US"
+                }
+            ]
+        }
+    ]
+}
