@@ -3,7 +3,7 @@ from django.db import models
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.forms import widgets
-
+from ckeditor.fields import RichTextField
 # Create your models here.
 class Activity(models.Model):
     title = models.CharField(_(u'演出名称'),max_length = 255)
@@ -11,9 +11,9 @@ class Activity(models.Model):
     act_time = models.DateTimeField(_(u'演出时间'),)
     site = models.CharField(_(u'演出地点'), max_length = 255)
     actor = models.CharField(_(u'演出人员'), max_length = 255,blank=True)
-    picurl = models.CharField(_(u'图片'), default='http://www.tsinghua.edu.cn/publish/th/campus/trees/view2.jpg', max_length = 100, blank=True, null=True)
+    picurl = models.ImageField(_(u'图片'),upload_to='thumb')#models.CharField(_(u'图片'), default='http://www.tsinghua.edu.cn/publish/th/campus/trees/view2.jpg', max_length = 100, blank=True, null=True)
     ticket = models.CharField(_(u'票务信息'),max_length = 255,blank=True)
-    content = models.TextField(_(u'详细介绍'),max_length = 20000)
+    content = RichTextField(_(u'详细介绍'),max_length = 20000)
     class Meta:
         verbose_name = _(u'校园演出资讯')
         verbose_name_plural = _(u'校园演出资讯')
