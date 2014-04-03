@@ -128,7 +128,7 @@ def getStudentTsinghuaNews():
                     picurl = 'http://student.tsinghua.edu.cn' + imgs[0]['src']
                 else:
                     picurl =  imgs[0]['src']
-
+                    
             for img in imgs:
                 img.parent.parent['style'] = 'line-height: 125%; text-align: center;'
                 if img['src'][len(img['src'])-3: len(img['src'])] != 'gif':
