@@ -1,0 +1,15 @@
+<xml>
+    <ToUserName><![CDATA[{{ to }}]]></ToUserName>
+    <FromUserName><![CDATA[{{ from }}]]></FromUserName>
+    <CreateTime>{{ time }}</CreateTime>
+    <MsgType><![CDATA[{{ type }}]]></MsgType>
+    <ArticleCount>{{ count }}</ArticleCount>
+    <Articles>
+        <item>
+            <Title><![CDATA[{{ news.title }}]]></Title>
+            <Description><![CDATA[{{ news.summary }}]]></Description>
+            <PicUrl><![CDATA[{% if not news.picurl %}http://tuantuan.tsinghua.edu.cn/static/img/view19.jpg{% else %}{{ news.picurl }}{% endif %}]]></PicUrl>
+            <Url><![CDATA[{{ local_url }}news/?id={{ news.id }}]]></Url>
+        </item>
+    </Articles>
+</xml> 

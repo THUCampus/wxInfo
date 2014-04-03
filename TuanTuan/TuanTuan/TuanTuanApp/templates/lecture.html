@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta  http-equiv="Content-Type"  content="text/html;  charset=utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone = yes">
+    <link rel="stylesheet" href="../static/activity.css" />
+</head>
+
+<body>
+    <div data-role = "page" id = "mainPage">
+  		<div id = "content">
+
+            <header>
+                <h3>{{ lecture.title }}</h3>
+            </header>
+            <br/>
+            <div align="center">
+                <img class="actImg" src="{{ lecture.picurl }}"
+                    onerror="this.parentNode.removeChild(this)">
+            </div>
+            <br/>
+            <div class="summary">
+                <p>演讲者：{{ lecture.actor }}</p>
+                <p>时间：{{ lecture.act_time }}</p>
+                <p>地点：{{ lecture.site }}</p>
+            </div>
+
+            {% autoescape off %}{{ lecture.content }}{% endautoescape %}
+
+        </div>
+    </div>
+
+</body>
+</html>
