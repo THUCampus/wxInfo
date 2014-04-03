@@ -1,4 +1,0 @@
-TsinghuaSpider
-==============
-
-THU爬虫
