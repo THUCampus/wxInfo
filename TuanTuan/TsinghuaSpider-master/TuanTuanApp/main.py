@@ -81,10 +81,80 @@ def getArtShowXML():
         if activity.count() == 0:
             try:
               Activity.objects.create(title=title, picurl=picurl, access_time=access_time, act_time=curtime, site=site,
-                    actor=actor, ticket=ticket, content = val)
+                    actor=actor, ticket=ticket, content = val, stick = 0)
             except Exception, data:
                 pass
 
+
+def getTsinghuaNewsCharacter():
+    rootUrl = 'http://news.tsinghua.edu.cn'
+    urls = 'http://news.tsinghua.edu.cn/publish/news/4208/index.html'
+    indexPage = urllib2.urlopen(urls)
+    indexContent = indexPage.read()
+    indexRoot = bs4.BeautifulSoup(indexContent)
+    linklist = indexRoot.find('div', id = 'datalist_sec2').ul.findAll('li')
+    for item in linklist:
+        #title
+        title = item.a.string.encode('utf-8')
+        picurl = ''
+        tmpUrl = item.a['href']
+        page = urllib2.urlopen(rootUrl + tmpUrl)
+        content = page.read()
+        root = bs4.BeautifulSoup(content)
+        #content
+        htmlText = root.find('div', id = 'datalist_detail')
+        #img
+        imgs = htmlText.findAll('img')
+        if len(imgs) > 0:
+            if imgs[0]['src'][0:4] != 'http':
+                picurl = rootUrl + imgs[0]['src']
+            else:
+                picurl =  imgs[0]['src']
+        #summary
+        summary = ''
+        #time
+        timeString =  root.find('div', id = 'title_detail_picwriter').string[4:14]
+        news = News.objects.filter(title=title)
+        if len(news) == 0:
+            try:
+                News.objects.create(title=title, content=htmlText.encode('utf-8'), picurl=picurl, time=timeString, summary=summary, stick = 0)
+            except Exception, data:
+                print "error"
+
+def getTsinghuaNewsSynthesis():
+    rootUrl = 'http://news.tsinghua.edu.cn'
+    urls = 'http://news.tsinghua.edu.cn/publish/news/4205/index.html'
+    indexPage = urllib2.urlopen(urls)
+    indexContent = indexPage.read()
+    indexRoot = bs4.BeautifulSoup(indexContent)
+    linklist = indexRoot.find('div', id = 'datalist_sec2').ul.findAll('li')
+    for item in linklist:
+        #title
+        title = item.a.string.encode('utf-8')
+        picurl = ''
+        tmpUrl = item.a['href']
+        page = urllib2.urlopen(rootUrl + tmpUrl)
+        content = page.read()
+        root = bs4.BeautifulSoup(content)
+        #content
+        htmlText = root.find('div', id = 'datalist_detail')
+        #img
+        imgs = htmlText.findAll('img')
+        if len(imgs) > 0:
+            if imgs[0]['src'][0:4] != 'http':
+                picurl = rootUrl + imgs[0]['src']
+            else:
+                picurl =  imgs[0]['src']
+        #summary
+        summary = ''
+        #time
+        timeString =  root.find('div', id = 'title_detail_picwriter').string[4:14]
+        news = News.objects.filter(title=title)
+        if len(news) == 0:
+            try:
+                News.objects.create(title=title, content=htmlText.encode('utf-8'), picurl=picurl, time=timeString, summary=summary, stick = 0)
+            except Exception, data:
+                print "error"
 
 def getStudentTsinghuaNews():
     d1 = datetime.datetime.now()
@@ -128,7 +198,7 @@ def getStudentTsinghuaNews():
                     picurl = 'http://student.tsinghua.edu.cn' + imgs[0]['src']
                 else:
                     picurl =  imgs[0]['src']
-                    
+
             for img in imgs:
                 img.parent.parent['style'] = 'line-height: 125%; text-align: center;'
                 if img['src'][len(img['src'])-3: len(img['src'])] != 'gif':
@@ -142,12 +212,12 @@ def getStudentTsinghuaNews():
             news = News.objects.filter(title=title)
             if len(news) == 0:
                 try:
-                    News.objects.create(title=title, content=content, picurl=picurl, time=time, summary=summary)
+                    News.objects.create(title=title, content=content, picurl=picurl, time=time, summary=summary, stick = 0)
                 except Exception, data:
                     print "error"
     else:
         print 'error occured in read news'
-
+'''
 def getTsinghuaLecture():
     server = 'http://tuantuan.ssast.org/sql/lecture/'
     #server = 'http://127.0.0.1:8000/sql/lecture/'
@@ -223,10 +293,10 @@ def getTsinghuaLecture():
             if lecture.count() == 0:
                 try:
                     Lecture.objects.create(title=title, picurl='http://www.tsinghua.edu.cn/publish/th/campus/trees/view8.jpg', access_time=access_time, act_time=act_time, site=site,
-                        actor=actor, content=content)
+                        actor=actor, content=content, stick = 0)
                 except Exception, data:
                     print 'error'
-
+'''
 def deleteAllData(days = 30):
     d1 = datetime.datetime.now()
     d3 = d1 - datetime.timedelta(days = days)
@@ -282,6 +352,11 @@ def endFormat(val = ''):
     return val[0:end]
 
 try:
+    getTsinghuaNewsCharacter
+    getTsinghuaNewsSynthesis()
+except:
+    print "error occured in TsinghuaNewsNet"
+try:
     getArtShowXML()
 except:
     print "error occured in artshow"
@@ -289,8 +364,10 @@ try:
     getStudentTsinghuaNews()
 except:
     print "error occured in TsinghuaNews"
+'''
 try:
     getTsinghuaLecture()
 except:
     print "error occured in Lectures"
+'''
 deleteAllData()

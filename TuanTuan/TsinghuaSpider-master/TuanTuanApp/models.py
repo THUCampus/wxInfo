@@ -14,6 +14,7 @@ class Activity(models.Model):
     picurl = models.CharField(_(u'图片'), default='http://www.tsinghua.edu.cn/publish/th/campus/trees/view2.jpg', max_length = 100, blank=True, null=True)
     ticket = models.CharField(_(u'票务信息'),max_length = 255,blank=True)
     content = models.TextField(_(u'详细介绍'),max_length = 20000)
+    stick = models.SmallIntegerField(_(u'置顶'))
     class Meta:
         verbose_name = _(u'校园演出资讯')
         verbose_name_plural = _(u'校园演出资讯')
@@ -27,6 +28,7 @@ class Lecture(models.Model):
     site = models.CharField(_(u'地点'), max_length = 255)
     actor = models.CharField(_(u'演讲者'), max_length = 255,blank=True)
     content = models.TextField(_(u'详细介绍'), max_length = 20000)
+    stick = models.SmallIntegerField(_(u'置顶'))
     class Meta:
         verbose_name = _(u'校园讲座')
         verbose_name_plural = _(u'校园讲座')
@@ -37,6 +39,7 @@ class News(models.Model):
     summary = models.CharField(_(u'摘要'), max_length = 255)
     content = models.TextField(_(u'详细内容'), max_length = 20000)
     time = models.DateField(_(u'时间'), )
+    stick = models.SmallIntegerField(_(u'置顶'))
     class Meta:
         verbose_name = _(u'校园新闻')
         verbose_name_plural = _(u'校园新闻')
@@ -45,6 +48,7 @@ class ModernFigure(models.Model):
     title = models.CharField(_(u'人物标题'), max_length = 255,unique=True)
     picurl = models.CharField(_(u'图片'), max_length = 100, blank=True, null=True)
     content = models.TextField(_(u'详细内容'), max_length = 20000)
+    stick = models.SmallIntegerField(_(u'置顶'))
     class Meta:
         verbose_name = _(u'校园人物')
         verbose_name_plural = _(u'校园人物')
@@ -54,6 +58,7 @@ class Club(models.Model):
     picurl = models.CharField(_(u'图片'), default='http://www.tsinghua.edu.cn/publish/th/campus/trees/view10.jpg',max_length = 100, blank=True, null=True)
     summary = models.CharField(_(u'简要信息'), max_length = 255)
     content = models.TextField(_(u'详细信息'), max_length = 20000)
+    stick = models.SmallIntegerField(_(u'置顶'))
     class Meta:
         verbose_name = _(u'社团协会')
         verbose_name_plural = _(u'社团协会')
@@ -63,6 +68,7 @@ class Department(models.Model):
     picurl = models.CharField(_(u'图片'), default='http://www.tsinghua.edu.cn/publish/th/campus/trees/view17.jpg',max_length = 100, blank=True, null=True)
     summary = models.CharField(_(u'简要信息'), max_length = 255)
     content = models.TextField(_(u'详细信息'), max_length = 20000)
+    stick = models.SmallIntegerField(_(u'置顶'))
     class Meta:
         verbose_name = _(u'学校部门')
         verbose_name_plural = _(u'学校部门')
