@@ -20,7 +20,7 @@ class ActivityAdmin(admin.ModelAdmin):
 admin.site.register(Activity, ActivityAdmin)
 
 class LectureAdmin(admin.ModelAdmin):
-    list_display = ('title', 'act_time', 'actor', 'site','stick')
+    list_display = ('title', 'act_time', 'actor', 'site','stick','PicPreview')
     list_filter = ('act_time',)
     ordering = ('-stick','act_time',)
     search_fields = ('title', 'actor',)
@@ -32,7 +32,7 @@ class LectureAdmin(admin.ModelAdmin):
 admin.site.register(Lecture, LectureAdmin)
 
 class NewsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'time', 'summary','stick')
+    list_display = ('title', 'time', 'summary','stick','PicPreview')
     list_filter = ('time',)
     ordering = ('-stick','-time',)
     search_fields = ('title','summary')
@@ -44,7 +44,7 @@ class NewsAdmin(admin.ModelAdmin):
 admin.site.register(News, NewsAdmin)
 
 class ClubAdmin(admin.ModelAdmin):
-    list_display = ('name','summary','stick')
+    list_display = ('name','summary','stick','PicPreview')
     search_fields = ('name','summary',)
     ordering = ('-stick',)
     formfield_overrides = {
@@ -55,7 +55,7 @@ class ClubAdmin(admin.ModelAdmin):
 admin.site.register(Club, ClubAdmin)
 
 class DepartmentAdmin(admin.ModelAdmin):
-    list_display = ('name','summary','stick')
+    list_display = ('name','summary','stick','PicPreview')
     search_fields = ('name','summary')
     ordering = ('-stick',)
     formfield_overrides = {
