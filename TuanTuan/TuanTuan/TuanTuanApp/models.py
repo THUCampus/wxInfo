@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms import widgets
 from ckeditor.fields import RichTextField
 from TuanTuan.settings import MEDIA_ROOT
+from TuanTuan.settings import MEDIA_URL
 # Create your models here.
 
 class Activity(models.Model):
@@ -20,10 +21,14 @@ class Activity(models.Model):
     act_time = models.DateTimeField(_(u'演出时间'),)
     site = models.CharField(_(u'演出地点'), max_length = 255)
     actor = models.CharField(_(u'演出人员'), max_length = 255,blank=True)
-    picurl = models.ImageField(_(u'预览图片'), upload_to=MEDIA_ROOT,)
+    picurl = models.ImageField(_(u'预览图片'), upload_to="uploads",)
     def PicPreview(self):
-        str = self.picurl
-        return '<img src="'+MEDIA_ROOT+'%s" width="200px"/>' % self.picurl
+        str = self.picurl.name
+        if str[0:4] != 'http':
+            return '<img src="' + MEDIA_URL + '%s" width="200px"/>' % self.picurl
+        else:
+            return '<img src="%s" width="200px"/>' % self.picurl
+        #return '<img src="%s" width="200px"/>' % self.picurl
     PicPreview.allow_tags = True
     ticket = models.CharField(_(u'票务信息'),max_length = 255,blank=True)
     content = RichTextField(_(u'详细介绍'),max_length = 20000)
