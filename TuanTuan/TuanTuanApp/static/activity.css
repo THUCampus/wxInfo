@@ -1,0 +1,32 @@
+html{
+    background-color: #e9e9e9;
+    font-size: 16px;
+    font-family: 'Microsoft YaHei';
+}
+
+header{
+    font-family: 'Microsoft YaHei';
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.actImg{
+    border-radius: 8px;
+    max-width: 95%;
+    height: auto;
+}
+
+#summary p{
+    font-family: 'Microsoft YaHei';
+    font-size: 16px;
+}
+
+#contentDiv {
+    font-family: 'Microsoft YaHei';
+    font-size: 15px;
+}
+
+p{
+    font-family: Microsoft YaHei;
+}

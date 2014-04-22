@@ -1,6 +1,6 @@
-/TsinghuaTuan/docs/娓呭崕绱崋涔嬪０_娴嬭瘯鏂囨。.docx
-/TsinghuaTuan/docs/娓呭崕绱崋涔嬪０_娴嬭瘯鏂囨。.pdf
-/TsinghuaTuan/docs/娓呭崕绱崋涔嬪０_璁捐鏂囨。.docx
-/TsinghuaTuan/docs/娓呭崕绱崋涔嬪０_璁捐鏂囨。.pdf
-/TsinghuaTuan/docs/娓呭崕绱崋涔嬪０_鎰挎櫙鏂囨。.docx
-/TsinghuaTuan/docs/娓呭崕绱崋涔嬪０_鎰挎櫙鏂囨。.pdf
+/.idea
+/.svn
+*.pyc
+TuanTuan/settings.py
+TuanTuan/TuanTuanApp/static/img/upload/
+TuanTuan/static/img/upload/

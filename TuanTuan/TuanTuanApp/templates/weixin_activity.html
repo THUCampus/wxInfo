@@ -1,0 +1,19 @@
+<xml>
+    <ToUserName><![CDATA[{{ to }}]]></ToUserName>
+    <FromUserName><![CDATA[{{ from }}]]></FromUserName>
+    <CreateTime>{{ time }}</CreateTime>
+    <MsgType><![CDATA[{{ type }}]]></MsgType>
+    <ArticleCount>{{ count }}</ArticleCount>
+    <Articles>
+        <item>
+            <Title><![CDATA[{{ activity.title }}]]></Title>
+            <Description><![CDATA[剧目：{{ activity.title }}
+时间：{{ activity.act_time|date:"Y年m月d日 H:i" }}
+地点：{{ activity.site }}
+演出人：{{ activity.actor }}
+{{ activity.ticket }}]]></Description>
+            <PicUrl><![CDATA[{{ activity.picurl }}]]></PicUrl>
+            <Url><![CDATA[{{ local_url }}activity/?id={{ activity.id }}]]></Url>
+        </item>
+    </Articles>
+</xml> 

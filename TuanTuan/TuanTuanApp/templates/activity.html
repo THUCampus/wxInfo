@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv=Content-Type content="text/html;charset=utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="../static/activity.css"/>
+</head>
+
+<body>
+    <div data-role = "page" id = "mainPage">
+  		<div id = "content">
+
+            <header>
+                {{ activity.title }}
+            </header>
+            <br/>
+            <div align = "center">
+                <img class="actImg" src="{{ activity.picurl }}"
+                    onerror="this.parentNode.removeChild(this)">
+            </div>
+
+            <!--div id = "summary">
+                <p><strong>时间：</strong>{{ activity.act_time }}</p>
+                <p><strong>地点：</strong>{{ activity.site }}</p>
+                <p><strong>演出：</strong>{{ activity.actor }}</p>
+                <p><strong>票价：</strong>{{ activity.ticket }}</p>
+            </div-->
+
+            <!--div>
+                <p style="text-align: center">
+                    <a class="a_demo_five" href="#">我喜欢</a>
+                </p>
+            </div-->
+
+            <div id = "contentDiv">
+                {% autoescape off %}{{ activity.content }}{% endautoescape %}
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>

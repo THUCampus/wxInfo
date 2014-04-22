@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login</title>
+    <meta  http-equiv="Content-Type"  content="text/html;  charset=utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.css" />
+	<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.2.1/jquery.mobile-1.2.1.min.js"></script>
+</head>
+
+<body>
+    <div data-role="page" id="loginPage">
+  		<div data-role="content">
+            <form action="" method="POST">{% csrf_token %}
+                <div data-role="fieldcontain" style="width:90%; margin:0 auto">
+                    <p id="loginmsg" style="font-family: Microsoft YaHei; color: red">{{ msg }}</p>
+                    <label for="username" style="font-family: Microsoft YaHei">学号：</label>
+                    <input type="text" name="username" id="username" value="" placeholder="Student No."/>
+                </div>
+
+                <div data-role="fieldcontain" style="width:90%; margin:0 auto">
+                    <label for="password" style="font-family: Microsoft YaHei">密码：</label>
+                    <input type="password" name="password" id="password" value="" placeholder="Password"/>
+                </div>
+
+                <div data-role="fieldcontain" style="width:90%; margin:0 auto">
+                    <label for="name" style="font-family: Microsoft YaHei">验证码：</label>
+                    <input type="text" name="name" id="name" value="" style="float:left;width: 50%; font-family: Microsoft YaHei" placeholder="输入右图验证码" onclick="showcanvas()"/>
+                    <canvas id="canvas" style="border: 1px #000 solid; margin-left: 10%;visibility:hidden;" width="90px" height="30px">this browser does not support canvas...</canvas>
+                    <p id="msg" style="font-family: Microsoft YaHei; color: red"></p>
+                </div>
+
+                <div style="width:40%; height:7%; margin:0 auto; margin-top: 5%">
+                    <input type="button" value="登录" onclick="login()"/>
+                </div>
+                <div style="width:40%; height:7%; margin:0 auto; margin-top: 5%;display: none">
+                    <input id="submit" type="submit"/>
+                </div>
+            </form>
+  		</div>
+	</div>
+    <script type="text/javascript">
+
+        var s  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        var code;
+        showcanvas = function(){
+            code = '';
+
+            for(var i = 0; i < 4; i++){
+                code += s.substr(parseInt(Math.random() * 36), 1);
+            }
+            function getRandom(start, end){
+                return start + Math.random() * (end - start);
+            }
+            var ctx = document.getElementById('canvas').getContext('2d');
+            document.getElementById('canvas').style.visibility = '';
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+            ctx.clearRect(0,0,90,30);
+            var font = "normal bold {FONTSIZE}px arial,sans-serif";//"13px sans-serif";
+            var start = 10;
+            var colors = ["rgb(255,165,0)","rgb(16,78,139)","rgb(0,139,0)","rgb(255,0,0)"];
+            var trans = {c: [-0.108,0.108], b: [-0.05,0.05]};
+            var fontsizes = [20,22,24,26];
+            for(var i in code){
+                ctx.font = font.replace('{FONTSIZE}',fontsizes[Math.round(Math.random()*10)%4]);
+                ctx.fillStyle = colors[Math.round(Math.random()*10)%4];//"rgba(0, 0, 200, 0.5)";
+                ctx.fillText(code[i], start, 20,60);
+                //con.translate(start,15);
+                //参考：
+                //a:水平缩放，default：1 ,取值：0.89,1.32,-0.56等,
+                //b:y轴斜切，default：0 ,取值：-0.89,1.32等,
+                //c:x轴斜切，default：0 ,取值：-0.89,1.32等,
+                //d:垂直缩放，default：1 ,取值：-0.89，0.88,1.32等,
+                //e:平移，default：0 ,取值：-53,52等,
+                //f:纵称，default：0 ,取值：-53,52等,
+                var c = getRandom(trans['c'][0],trans['c'][1]);
+                var b = getRandom(trans['b'][0],trans['b'][1]);
+                ctx.transform(1, b, c, 1, 0, 0);
+                start += 17;
+            }
+
+        }
+        login = function() {
+            if(code.toString().toLowerCase() == document.getElementById('name').value.toLowerCase()){
+                $('#submit').click();
+            }
+            else{
+                document.getElementById('name').value = ''
+                document.getElementById('msg').innerText = '验证码输入错误，请重新输入';
+            }
+        }
+
+    </script>
+</body>
+</html>

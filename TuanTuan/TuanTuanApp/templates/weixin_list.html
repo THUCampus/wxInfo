@@ -1,0 +1,18 @@
+<xml>
+    <ToUserName><![CDATA[{{ to }}]]></ToUserName>
+    <FromUserName><![CDATA[{{ from }}]]></FromUserName>
+    <CreateTime>{{ time }}</CreateTime>
+    <MsgType><![CDATA[{{ type }}]]></MsgType>
+    <ArticleCount>{{ count }}</ArticleCount>
+    <Articles>
+        {% for each in list %}
+            {% if  forloop.counter < 6 %}
+                <item>
+                    <Title><![CDATA[{{ each.title }}]]></Title>
+                    <PicUrl><![CDATA[{{ each.picurl }}]]></PicUrl>
+                    <Url><![CDATA[{{ each.url }}]]></Url>
+                </item>
+            {% endif %}
+        {% endfor %}
+    </Articles>
+</xml>
