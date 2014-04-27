@@ -32,7 +32,7 @@ def use_help():
 
 def hot_activity():
     global count, template_type, content, List
-    activities = Activity.objects.all().order_by('act_time')
+    activities = Activity.objects.all().order_by('-stick','act_time')
     List = []
     count = 0
     for each in activities:
@@ -49,12 +49,7 @@ def recent_lecture():
     global count, template_type, content, List
     List = []
     count = 0
-    lectures = Lecture.objects.all().order_by('act_time')
-    lecture = Club.objects.filter(name = '时事大讲堂')
-    if len(lecture) == 1:
-        lecture = lecture[0]
-        List.append(result_url(title=lecture.name, picurl=lecture.picurl, url=local_url + 'club/?id=' + str(lecture.id)))
-        count = 1
+    lectures = Lecture.objects.all().order_by('-stick','act_time')
     for each in lectures:
         if each.act_time.strftime('%Y-%m-%d') >= time.strftime("%Y-%m-%d", time.localtime(time.time())):
             List.append(result_url(title=each.title, picurl=each.picurl, url=local_url + 'lecture/?id=' + str(each.id)))
@@ -67,7 +62,7 @@ def recent_lecture():
 
 def school_news():
     global count, template_type, content, List
-    news = News.objects.all().order_by('-time')
+    news = News.objects.all().order_by('-stick','-time')
     List = []
     count = 0
     for each in news:
@@ -107,42 +102,37 @@ def school_figure():
 def school_club():
     global count, template_type, content, List
     List = []
-    clubs = Club.objects.all()
+    clubs = Club.objects.all().order_by('-stick')
     length = len(clubs)
     if length < 4:
         count = length
         template_type = 'list'
-        club = clubs.filter(name='紫荆志愿者服务总队')
-        if len(club) == 1:
-            club = club[0]
-            List.append(result_url(title=club.name, picurl=club.picurl, url=local_url + 'club/?id=' + str(club.id)))
         for club in clubs:
-            if club.name == u'时事大讲堂' or club.name == u'紫荆志愿者服务总队':
-                continue
             List.append(result_url(title=club.name, picurl= club.picurl, url=local_url + 'club/?id=' + str(club.id)))
     else:
         count = 0
         template_type = 'list'
-        club = clubs.filter(name='紫荆志愿者服务总队')
-        if len(club) == 1:
-            club = club[0]
-            count += 1
-            List.append(result_url(title=club.name, picurl=club.picurl, url=local_url + 'club/?id=' + str(club.id)))
-        club_list = range(0,length)
-        clubId = random.sample(club_list, 3)
-        for id in clubId:
-            if clubs[id].name == u'时事大讲堂' or clubs[id].name == u'紫荆志愿者服务总队':
-                clubId.remove(id)
-        for id in clubId:
-            count += 1
-            club = clubs[id]
-            List.append(result_url(title=club.name, picurl=club.picurl, url=local_url + 'club/?id=' + str(club.id)))
+        for club in clubs:
+            if club.stick > 0:
+                List.append(result_url(title=club.name, picurl= club.picurl, url=local_url + 'club/?id=' + str(club.id)))
+                count +=1
+            else:
+                break
+            if count > 3:
+                break
+        if count < 4:
+            club_list = range(count,length)
+            clubId = random.sample(club_list, 4-count)
+            for id in clubId:
+                count += 1
+                club = clubs[id]
+                List.append(result_url(title=club.name, picurl=club.picurl, url=local_url + 'club/?id=' + str(club.id)))
     List.append(result_url(title='获取更多社团协会', picurl='', url='http://tuan.ssast.org/u/helpclub/'))
     count += 1
 
 def school_department():
     global count, template_type, content, List, wei_data
-    departments = Department.objects.all()
+    departments = Department.objects.all().order_by('-stick')
     List = []
     length = len(departments)
     if length == 0:
@@ -158,13 +148,23 @@ def school_department():
         for department in departments:
             List.append(result_url(title=department.name, picurl=department.picurl, url=local_url + 'department/?id=' + str(department.id)))
     else:
-        count = 5
+        count = 0
         template_type = 'list'
-        department_list = range(0,length)
-        departmentId = random.sample(department_list, 5)
-        for id in departmentId:
-            department = departments[id]
-            List.append(result_url(title=department.name, picurl=department.picurl, url=local_url + 'department/?id=' + str(department.id)))
+        for department in departments:
+            if department.stick > 0:
+                List.append(result_url(title=department.name, picurl= department.picurl, url=local_url + 'club/?id=' + str(department.id)))
+                count +=1
+            else:
+                break
+            if count > 4:
+                break
+        if count < 5:
+            department_list = range(count,length)
+            departmentId = random.sample(department_list, 5-count)
+            for id in departmentId:
+                count += 1
+                department = departments[id]
+                List.append(result_url(title=department.name, picurl=department.picurl, url=local_url + 'department/?id=' + str(department.id)))
 
 def text_query(msg):
     global count, template_type, content, List, wei_data
