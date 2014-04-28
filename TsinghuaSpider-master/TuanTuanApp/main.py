@@ -115,10 +115,11 @@ def getTsinghuaNewsCharacter():
         #time
         timeString =  root.find('div', id = 'title_detail_picwriter').string[4:14]
         news = News.objects.filter(title=title)
+	print "insert one element"
         if len(news) == 0:
             try:
                 News.objects.create(title=title, content=htmlText.encode('utf-8'), picurl=picurl, time=timeString, summary=summary, stick = 0)
-            except Exception, data:
+            except:
                 print "error"
 
 def getTsinghuaNewsSynthesis():
@@ -351,15 +352,15 @@ def endFormat(val = ''):
         end == len(val)
     return val[0:end]
 
-try:
-    getTsinghuaNewsCharacter
+#try:
+    getTsinghuaNewsCharacter()
     getTsinghuaNewsSynthesis()
-except:
-    print "error occured in TsinghuaNewsNet"
-try:
-    getArtShowXML()
-except:
-    print "error occured in artshow"
+#except:
+#   print "error occured in TsinghuaNewsNet"
+#try:
+    #getArtShowXML()
+#except:
+    #print "error occured in artshow"
 try:
     getStudentTsinghuaNews()
 except:
@@ -370,4 +371,4 @@ try:
 except:
     print "error occured in Lectures"
 '''
-deleteAllData()
+#deleteAllData()

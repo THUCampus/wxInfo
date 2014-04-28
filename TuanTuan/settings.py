@@ -1,6 +1,6 @@
 # Django settings for TsinghuaChat project.
 import os
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -18,17 +18,6 @@ if 'SERVER_SOFTWARE' in os.environ:
             'PASSWORD': '339gRvGZ7AIgDaA88aD10SG7tLYNQbn0',                  # Not used with sqlite3.
             'HOST': 'sqld.duapp.com',                      # Set to empty string for localhost. Not used with sqlite3.
             'PORT': '4050',                      # Set to empty string for default. Not used with sqlite3.
-            }
-    }
-elif (os.environ.get('USER', '') == 'ssastadmin') or ('SSAST_DEPLOYMENT' in os.environ):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'tuantuan',
-            'USER': 'tuantuan',
-            'PASSWORD': '8G5weIMsCphP87XA',
-            'HOST': '',
-            'PORT': '',
             }
     }
 else:
