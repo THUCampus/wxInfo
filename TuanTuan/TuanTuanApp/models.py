@@ -31,6 +31,8 @@ class Activity(models.Model):
     PicPreview.allow_tags = True
     ticket = models.CharField(_(u'票务信息'),max_length = 255,blank=True)
     content = RichTextField(_(u'详细介绍'),max_length = 20000)
+    def __unicode__(self):
+        return u'%s' % (self.picurl)
     class Meta:
         verbose_name = _(u'校园演出资讯')
         verbose_name_plural = _(u'校园演出资讯')
@@ -58,6 +60,8 @@ class Lecture(models.Model):
     site = models.CharField(_(u'地点'), max_length = 255)
     actor = models.CharField(_(u'演讲者'), max_length = 255,blank=True)
     content = RichTextField(_(u'详细介绍'),max_length = 20000)
+    def __unicode__(self):
+        return u'%s' % (self.picurl)
     class Meta:
         verbose_name = _(u'校园讲座')
         verbose_name_plural = _(u'校园讲座')
@@ -81,6 +85,8 @@ class News(models.Model):
     PicPreview.allow_tags = True
     summary = models.CharField(_(u'摘要'), max_length = 255)
     content = RichTextField(_(u'详细内容2'),max_length = 20000)
+    def __unicode__(self):
+        return u'%s' % (self.picurl)
     time = models.DateField(_(u'时间'), )
     class Meta:
         verbose_name = _(u'校园新闻')
@@ -97,6 +103,8 @@ class ModernFigure(models.Model):
     stick = models.SmallIntegerField(_(u'置顶'),choices=PRIORITY,default=0)
     picurl = models.CharField(_(u'图片'), max_length = 100, blank=True, null=True)
     content = RichTextField(_(u'详细内容'),max_length = 20000)
+    def __unicode__(self):
+        return u'%s' % (self.picurl)
     class Meta:
         verbose_name = _(u'校园人物')
         verbose_name_plural = _(u'校园人物')
@@ -120,6 +128,8 @@ class Club(models.Model):
     PicPreview.allow_tags = True
     summary = models.CharField(_(u'简要信息'), max_length = 255)
     content = RichTextField(_(u'详细介绍'),max_length = 20000)
+    def __unicode__(self):
+        return u'%s' % (self.picurl)
     class Meta:
         verbose_name = _(u'社团协会')
         verbose_name_plural = _(u'社团协会')
@@ -143,6 +153,8 @@ class Department(models.Model):
     PicPreview.allow_tags = True
     summary = models.CharField(_(u'简要信息'), max_length = 255)
     content = RichTextField(_(u'详细介绍'),max_length = 20000)
+    def __unicode__(self):
+        return u'%s' % (self.picurl)
     class Meta:
         verbose_name = _(u'学校部门')
         verbose_name_plural = _(u'学校部门')
