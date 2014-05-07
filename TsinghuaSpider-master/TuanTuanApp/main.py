@@ -55,10 +55,18 @@ def getArtShowXML():
             for dateitem in daystr:
                 date = dateitem.split("-")
                 year = date[0]
+		yl = len(year)
+		year = year[yl - 4:]
                 month = date[1]
                 days = date[2].split(" ")[0].split("/")
                 for item in days:
-                    dates.append(year+"-"+month+"-"+item);
+		    it = item
+                    if len(item)> 2:
+			it = item[0]
+			if item[1]>= '0' and item[1] <='9':
+				it = it + item[1]
+			
+                    dates.append(year+"-"+month+"-"+it);
             timeloc = curtime.find(":")
             time = curtime[timeloc-2:timeloc+3]
 
@@ -77,12 +85,15 @@ def getArtShowXML():
             #print site.encode('utf-8')
             #print  ticket.encode('utf-8')
             for item in timearray:
-                activity = Activity.objects.filter(title=title, act_time=item)
+                #print item
+		#continue
+		activity = Activity.objects.filter(title=title, act_time=item)
                 if activity.count() == 0:
                   Activity.objects.create(title=title, picurl=picurl, access_time=access_time, act_time=item, site=site,
                         actor='', ticket=ticket, content = val, stick = 0)
         except Exception, data:
-            continue
+            print "error insert data in activity"
+	    print title
 
 
 def getTsinghuaNewsCharacter():
@@ -95,7 +106,8 @@ def getTsinghuaNewsCharacter():
     for item in linklist:
         #title
         title = item.a.string.encode('utf-8')
-        picurl = ''
+        print title
+	picurl = ''
         tmpUrl = item.a['href']
         page = urllib2.urlopen(rootUrl + tmpUrl)
         content = page.read()
