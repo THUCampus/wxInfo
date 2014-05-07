@@ -18,72 +18,72 @@ import string
 from TuanTuanApp.models import *
 from participle import *
 import time
-
+import datetime
 def getArtShowXML():
-    url = 'http://www.hall.tsinghua.edu.cn/yczx.aspx'
+    url = 'http://www.hall.tsinghua.edu.cn/column/pwzx_hdap'
     content = urllib2.urlopen(url).read()
     soup = bs4.BeautifulSoup(content)
     #find all <a> links
-    mytable = soup.find_all('a')
+    mytable = soup.find_all("ul", class_="hd_list")
     #server to post
-    server = 'http://tuantuan.ssast.org/sql/activity/'
+    #server = 'http://tuantuan.ssast.org/sql/activity/'
 
     #from 9th to 24th
-    for item in range(9, 24, 1):
-        link = mytable[item]['href']
+    for item in mytable:
+        title = item.a.text
+        link = item.a['href']
+        ticket=item.li.text
+
         #search for id
-        regex = re.search("[0-9]+", link)
-        number = string.atoi(regex.group(0))
+        #regex = re.search("[0-9]+", link)
+        #number = string.atoi(regex.group(0))
         content = urllib2.urlopen('http://www.hall.tsinghua.edu.cn/' + link).read()
         root = bs4.BeautifulSoup(content)
         #contents in the 5th table
-        table = root.html.find_all('table')[5]
-        table['width'] = "97%"
-        table['height'] = ""
-        tds = root.html.find_all(attrs = {"valign": "top"})
-        for td in tds:
-            td.extract()
-
-        td = table.find_all('td')[0]
-        td['width'] = "100%"
-
+        table = root.html.find_all("div", class_="column_1")[0]
         picurl = 'http://www.hall.tsinghua.edu.cn' + table.img['src']
-        for imgtag in table.find_all('img'):
-            imgtag.extract()
+        acttitle = table.find_all("div", class_="xqy_p")[0].find_all("p")[1].text
 
-        #<p> tags
-        ptags = table.find_all('p')
-        ptags[1].extract()
-        ptags[2].extract()
-        #title
-        titlestr = ptags[3].text.split('\n')[0].encode('utf-8')
-        title = titlestr[9:len(titlestr)]
-        #time
-        curtime = ptags[4].text.split('\n')[0][3:].encode('utf-8')
         try:
-            a = title.decode('utf-8')
-            b = curtime.decode('utf-8')
-        except:
+            curtime = table.find_all("li", class_="time_1")[0].text.encode("utf-8")
+            curtime =curtime.replace("年", "-")
+            curtime = curtime.replace("月", "-")
+            curtime = curtime.replace("日", " ")
+            dates = []
+            daystr = curtime.split(' ')[0]
+            daystr = daystr.split(',')
+            for dateitem in daystr:
+                date = dateitem.split("-")
+                year = date[0]
+                month = date[1]
+                days = date[2].split(" ")[0].split("/")
+                for item in days:
+                    dates.append(year+"-"+month+"-"+item);
+            timeloc = curtime.find(":")
+            time = curtime[timeloc-2:timeloc+3]
+
+            timearray = []
+            for item in dates:
+                timearray.append(item + " "+time)
+            site=table.find_all("li", class_="add")[0].text
+            val=table.text
+
+
+            access_time = "1993-01-01"
+            #print title.encode('utf-8')
+            #print picurl
+            #print access_time
+            #print "\n"
+	    #print curtime.encode('utf-8')
+            #print site.encode('utf-8')
+            #print  ticket.encode('utf-8')
+            for item in timearray:
+                activity = Activity.objects.filter(title=title, act_time=item)
+                if activity.count() == 0:
+                  Activity.objects.create(title=title, picurl=picurl, access_time=access_time, act_time=item, site=site,
+                        actor='', ticket=ticket, content = val, stick = 0)
+        except Exception, data:
             continue
-        a = title.decode('utf-8')
-        #actor
-        actor = ptags[5].text.encode('utf-8')
-        #site
-        site = ptags[4].text.split('\n')[2][3:].strip()
-        site = site[3:].encode('utf-8')
-        #ticket
-        ticket = ptags[6].text.split('\n')[0].encode('utf-8')
-        #access_time = ""
-        val = str(table).replace('\xc2\xa0','')
-        val = EnterDisplay(val)
-        access_time = "1993-01-01"
-        activity = Activity.objects.filter(title=title, act_time=curtime)
-        if activity.count() == 0:
-            try:
-              Activity.objects.create(title=title, picurl=picurl, access_time=access_time, act_time=curtime, site=site,
-                    actor=actor, ticket=ticket, content = val, stick = 0)
-            except Exception, data:
-                pass
 
 
 def getTsinghuaNewsCharacter():
@@ -159,6 +159,7 @@ def getTsinghuaNewsSynthesis():
 
 def getStudentTsinghuaNews():
     d1 = datetime.datetime.now()
+    #print "time"
     d3 = d1 - datetime.timedelta(days = 20)
     url1 = 'http://166.111.17.5:8080/getNews?'
     urlparam = {
@@ -166,17 +167,21 @@ def getStudentTsinghuaNews():
         'end_time':d1.strftime('%Y-%m-%d %H:%M:%S'),
         'valid_code':'tuanwei'
     }
+    print url1
     sd = urllib.urlencode(urlparam)
     url2 = url1 + sd
+    print url2
     page = urllib2.urlopen(url2)
-
+    print url2
     #page = urllib2.urlopen('''http://166.111.17.5:8080/getNews?start_time=2013-11-10%2000:00:00&end_time=2013-12-21%2000:00:00&valid_code=tuanwei''')
     content = page.read()
     json_read = json.loads(content)
+    print content
     if(json_read['result'] == 'success'):
 
         for item in json_read['news']:
             title = item['title'].encode('utf-8')
+            print title
             content = item['content'].encode('utf-8')
             time = item['updatetime'].split('T')[0]
             summary = item['newAbstract'].encode('utf-8')
@@ -218,86 +223,7 @@ def getStudentTsinghuaNews():
                     print "error"
     else:
         print 'error occured in read news'
-'''
-def getTsinghuaLecture():
-    server = 'http://tuantuan.ssast.org/sql/lecture/'
-    #server = 'http://127.0.0.1:8000/sql/lecture/'
-    page = urllib2.urlopen("http://oars.tsinghua.edu.cn/zzh/30630.nsf/1de?ReadForm&Start=1&Count=50&Expand=2&TemplateType=2&TargetUNID=58F7D30CE9E69CFA482567B800261A8B&AutoFramed")
-    content = page.read().decode('gb2312', 'ignore').encode('utf8')
-    root = bs4.BeautifulSoup(content)
-    linklist = root.findAll('a')
 
-    for item in range(7,len(linklist)-2,2):
-        if linklist[item].contents[0].encode('utf8').find('文化素质教育讲座') >= 0:
-            link = linklist[item]['href']
-            temp = link
-            number = temp.split('/')[4]
-            page = urllib2.urlopen("http://oars.tsinghua.edu.cn" + link)
-            content = page.read().decode('gb2312', 'ignore').encode('utf8')
-            root = bs4.BeautifulSoup(content)
-            content = root.findAll('P')[0]
-            hr = content.findAll('hr')
-            for each in hr:
-                each.extract()
-
-            temp = str(content)
-            temp = temp.split('\n')
-            title = ""
-            actor = '无'
-            act_time = '2013-01-01'
-            site = "清华大学"
-            for each in temp:
-                if each.find('演讲题目：') >= 0:
-                    title ="《文化素质教育讲座》--" + each[15:len(each)]
-                    title = endFormat(title)
-                if each.find('第') >= 0 and each.find('讲 ') >= 0:
-                    title ="《文化素质教育讲座》--" + each[0:len(each)]
-                    title = endFormat(title)
-                if each.find('第') >= 0 and each.find('期：') >= 0:
-                    title ="《文化素质教育讲座》--" + each[0:len(each)]
-                    title = endFormat(title)
-                if each.find('演讲人：') >= 0:
-                    actor = each[12:len(each)]
-                    actor = endFormat(actor)
-                if each.find('嘉  宾：') >= 0:
-                    actor = each[11:len(each)]
-                    actor = endFormat(actor)
-                if each.find('主讲人：') >= 0:
-                    actor = each[12:len(each)]
-                    actor = endFormat(actor)
-                if each.find('讲座嘉宾：') >= 0:
-                    actor = each[15:len(each)]
-                    actor = endFormat(actor)
-                if each.find('时间：') >= 0:
-                    act_time = each[9:len(each)]
-                    act_time = endFormat(act_time)
-                if each.find('时  间：') >= 0:
-                    act_time = each[11:len(each)]
-                    act_time = endFormat(act_time)
-                if each.find('日期：') >= 0:
-                    act_time = each[9:len(each)]
-                    act_time = endFormat(act_time)
-                if each.find('地点：') >= 0:
-                    site = each[9:len(each)]
-                    site = endFormat(site)
-                if each.find('地  点：') >= 0:
-                    site = each[11:len(each)]
-                    site = endFormat(site)
-            if title == "":
-                title = '《文化素质教育讲座》--' + actor
-            content = str(content)
-            content = content.replace('</br>','')
-            curtime = TimeProcess(Participle(act_time).getAll()).getTimes()
-            act_time = curtime[0][0] + ' ' + curtime[0][1]
-            access_time = time.strftime('%Y-%m-%d',time.localtime(time.time()))
-            lecture = Lecture.objects.filter(title=title)
-            if lecture.count() == 0:
-                try:
-                    Lecture.objects.create(title=title, picurl='http://www.tsinghua.edu.cn/publish/th/campus/trees/view8.jpg', access_time=access_time, act_time=act_time, site=site,
-                        actor=actor, content=content, stick = 0)
-                except Exception, data:
-                    print 'error'
-'''
 def deleteAllData(days = 30):
     d1 = datetime.datetime.now()
     d3 = d1 - datetime.timedelta(days = days)
@@ -352,17 +278,22 @@ def endFormat(val = ''):
         end == len(val)
     return val[0:end]
 
+
 #try:
-    getTsinghuaNewsCharacter()
-    getTsinghuaNewsSynthesis()
+#    getTsinghuaNewsCharacter()
+#    getTsinghuaNewsSynthesis()
 #except:
 #   print "error occured in TsinghuaNewsNet"
-#try:
-    #getArtShowXML()
-#except:
-    #print "error occured in artshow"
 try:
+    print "hello"
+    getArtShowXML()
+    print "world"
+except:
+    print "error occured in artshow"
+try:
+    print "hello"
     getStudentTsinghuaNews()
+    print "world"
 except:
     print "error occured in TsinghuaNews"
 '''
