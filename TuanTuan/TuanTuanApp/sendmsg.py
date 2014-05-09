@@ -239,5 +239,3 @@ def send_msg(request, xml):
     else:
         variables = RequestContext(request, {'to':_to, 'from':_from, 'time':int(time.time()),'type':'news', 'count': count, 'local_url':local_url, template_type: wei_data})
         return render_to_response('weixin_' + template_type + '.html', variables)
-
-
