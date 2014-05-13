@@ -42,6 +42,8 @@ def getArtShowXML():
         #contents in the 5th table
         table = root.html.find_all("div", class_="column_1")[0]
         picurl = 'http://www.hall.tsinghua.edu.cn' + table.img['src']
+        table.img.extract()
+	#table.img['src'] = 'http://www.hall.tsinghua.edu.cn' + table.img['src']
         acttitle = table.find_all("div", class_="xqy_p")[0].find_all("p")[1].text
 
         try:
@@ -76,6 +78,7 @@ def getArtShowXML():
             #print curtime.encode('utf-8')
             #print site.encode('utf-8')
             #print  ticket.encode('utf-8')
+	    print val
             for item in timearray:
                 activity = Activity.objects.filter(title=title, act_time=item)
                 if activity.count() == 0:
@@ -293,8 +296,9 @@ def endFormat(val = ''):
     return val[0:end]
 
 try:
-    getTsinghuaNewsCharacter()
-    getTsinghuaNewsSynthesis()
+    i = 0
+    #getTsinghuaNewsCharacter()
+    #getTsinghuaNewsSynthesis()
 except:
     print "error occured in TsinghuaNewsNet"
 try:
