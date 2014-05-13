@@ -42,7 +42,17 @@ def getArtShowXML():
         #contents in the 5th table
         table = root.html.find_all("div", class_="column_1")[0]
         picurl = 'http://www.hall.tsinghua.edu.cn' + table.img['src']
-        table.img.extract()
+        imgs = table.findAll('img')
+        imgs[0].extract()
+        imgs.remove(imgs[0])
+        for img in imgs:
+            img.parent['style'] = 'line-height: 125%; text-align: center;'
+            if img['src'][len(img['src'])-3: len(img['src'])] != 'gif':
+                img['style'] = "width:95%; border-radius: 8px; text-align: center;"
+                img['height'] = ""
+                img['width'] = ""
+            if img['src'][0:4] != 'http':
+                img['src'] = rootUrl + img['src']
 	#table.img['src'] = 'http://www.hall.tsinghua.edu.cn' + table.img['src']
         acttitle = table.find_all("div", class_="xqy_p")[0].find_all("p")[1].text
 
@@ -121,7 +131,7 @@ def getTsinghuaNewsCharacter():
                 	picurl =  item['src']
         print picurl
         for img in imgs:
-            img.parent.parent['style'] = 'line-height: 125%; text-align: center;'
+            img.parent['style'] = 'line-height: 125%; text-align: center;'
             if img['src'][len(img['src'])-3: len(img['src'])] != 'gif':
                 img['style'] = "width:95%; border-radius: 8px; text-align: center;"
                 img['height'] = ""
@@ -165,7 +175,7 @@ def getTsinghuaNewsSynthesis():
                 picurl =  imgs[0]['src']
 
         for img in imgs:
-            img.parent.parent['style'] = 'line-height: 125%; text-align: center;'
+            img.parent['style'] = 'line-height: 125%; text-align: center;'
             if img['src'][len(img['src'])-3: len(img['src'])] != 'gif':
                 img['style'] = "width:95%; border-radius: 8px; text-align: center;"
                 img['height'] = ""
