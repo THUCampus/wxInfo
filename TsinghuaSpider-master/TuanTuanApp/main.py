@@ -20,6 +20,7 @@ from participle import *
 import time
 
 def getArtShowXML():
+    print "hehe"
     url = 'http://www.hall.tsinghua.edu.cn/column/pwzx_hdap'
     content = urllib2.urlopen(url).read()
     soup = bs4.BeautifulSoup(content)
@@ -45,6 +46,7 @@ def getArtShowXML():
         imgs = table.findAll('img')
         imgs[0].extract()
         imgs.remove(imgs[0])
+	rootUrl = 'http://www.hall.tsinghua.edu.cn'
         for img in imgs:
             img.parent['style'] = 'line-height: 125%; text-align: center;'
             if img['src'][len(img['src'])-3: len(img['src'])] != 'gif':
@@ -88,7 +90,7 @@ def getArtShowXML():
             #print curtime.encode('utf-8')
             #print site.encode('utf-8')
             #print  ticket.encode('utf-8')
-	    #print val
+	    print val
             for item in timearray:
                 activity = Activity.objects.filter(title=title, act_time=item)
                 if activity.count() == 0:
@@ -310,18 +312,19 @@ def endFormat(val = ''):
     return val[0:end]
 
 try:
-    #i = 0
-    getTsinghuaNewsCharacter()
+    i = 0
+    #getTsinghuaNewsCharacter()
     #getTsinghuaNewsSynthesis()
 except:
     print "error occured in TsinghuaNewsNet"
+#try:
+    #i = 0
+getArtShowXML()
+#except:
+ #   print "error occured in artshow"
 try:
     i = 0
-    #getArtShowXML()
-except:
-    print "error occured in artshow"
-try:
-    getStudentTsinghuaNews()
+    #getStudentTsinghuaNews()
 except:
     print "error occured in TsinghuaNews"
 '''
