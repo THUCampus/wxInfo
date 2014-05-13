@@ -128,7 +128,7 @@ def getTsinghuaNewsCharacter():
 
         pTags = htmlText.findAll('p')
         for p in pTags:
-            p['style'] = "line-height:25px;"
+            p['style'] += "line-height:25px;"
         #img
         imgs = htmlText.findAll('img')
         for item in imgs:
@@ -182,7 +182,7 @@ def getTsinghuaNewsSynthesis():
 
         pTags = htmlText.findAll('p')
         for p in pTags:
-            p['style'] = "line-height:25px;"
+            p['style'] += "line-height:25px;"
         #img
         imgs = htmlText.findAll('img')
         for item in imgs:
