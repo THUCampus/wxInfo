@@ -22,6 +22,7 @@ import time
 def getArtShowXML():
     print "hehe"
     url = 'http://www.hall.tsinghua.edu.cn/column/pwzx_hdap'
+    rootUrl = 'http://www.hall.tsinghua.edu.cn'
     content = urllib2.urlopen(url).read()
     soup = bs4.BeautifulSoup(content)
     #find all <a> links
@@ -42,11 +43,11 @@ def getArtShowXML():
         root = bs4.BeautifulSoup(content)
         #contents in the 5th table
         table = root.html.find_all("div", class_="column_1")[0]
-        picurl = 'http://www.hall.tsinghua.edu.cn' + table.img['src']
+        picurl = rootUrl + table.img['src']
         imgs = table.findAll('img')
         imgs[0].extract()
         imgs.remove(imgs[0])
-	rootUrl = 'http://www.hall.tsinghua.edu.cn'
+
         for img in imgs:
             img.parent['style'] = 'line-height: 125%; text-align: center;'
             if img['src'][len(img['src'])-3: len(img['src'])] != 'gif':
@@ -55,6 +56,9 @@ def getArtShowXML():
                 img['width'] = ""
             if img['src'][0:4] != 'http':
                 img['src'] = rootUrl + img['src']
+        pTags = table.findAll('p')
+        for p in pTags:
+            p['style'] = "line-height:25px;"
 	#table.img['src'] = 'http://www.hall.tsinghua.edu.cn' + table.img['src']
         acttitle = table.find_all("div", class_="xqy_p")[0].find_all("p")[1].text
 
@@ -121,17 +125,23 @@ def getTsinghuaNewsCharacter():
         root = bs4.BeautifulSoup(content)
         #content
         htmlText = root.find('div', id = 'datalist_detail')
+
+        pTags = htmlText.findAll('p')
+        for p in pTags:
+            p['style'] = "line-height:25px;"
         #img
         imgs = htmlText.findAll('img')
-	for item in imgs:
-		l = len(item['src'])
-		if(item['src'][l-4:l] == ".gif"):
-			continue
-            	if item['src'][0:4] != 'http':
-               		picurl = rootUrl + item['src']
-            	else:
-                	picurl =  item['src']
-        print picurl
+        for item in imgs:
+            l = len(item['src'])
+            if(item['src'][l-4:l] == ".gif"):
+                continue
+            if item['src'][0:4] != 'http':
+                picurl = rootUrl + item['src']
+                break
+            else:
+                picurl =  item['src']
+                break
+            print picurl
         for img in imgs:
             img.parent['style'] = 'line-height: 125%; text-align: center;'
             if img['src'][len(img['src'])-3: len(img['src'])] != 'gif':
@@ -168,13 +178,24 @@ def getTsinghuaNewsSynthesis():
         root = bs4.BeautifulSoup(content)
         #content
         htmlText = root.find('div', id = 'datalist_detail')
+
+
+        pTags = htmlText.findAll('p')
+        for p in pTags:
+            p['style'] = "line-height:25px;"
         #img
         imgs = htmlText.findAll('img')
-        if len(imgs) > 0:
-            if imgs[0]['src'][0:4] != 'http':
-                picurl = rootUrl + imgs[0]['src']
+        for item in imgs:
+            l = len(item['src'])
+            if(item['src'][l-4:l] == ".gif"):
+                continue
+            if item['src'][0:4] != 'http':
+                picurl = rootUrl + item['src']
+                break
             else:
-                picurl =  imgs[0]['src']
+                picurl =  item['src']
+                break
+            print picurl
 
         for img in imgs:
             img.parent['style'] = 'line-height: 125%; text-align: center;'
@@ -313,8 +334,8 @@ def endFormat(val = ''):
 
 try:
     i = 0
-    #getTsinghuaNewsCharacter()
-    #getTsinghuaNewsSynthesis()
+    getTsinghuaNewsCharacter()
+    getTsinghuaNewsSynthesis()
 except:
     print "error occured in TsinghuaNewsNet"
 #try:
