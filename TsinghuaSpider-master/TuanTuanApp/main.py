@@ -78,7 +78,7 @@ def getArtShowXML():
             #print curtime.encode('utf-8')
             #print site.encode('utf-8')
             #print  ticket.encode('utf-8')
-	    print val
+	    #print val
             for item in timearray:
                 activity = Activity.objects.filter(title=title, act_time=item)
                 if activity.count() == 0:
@@ -111,11 +111,15 @@ def getTsinghuaNewsCharacter():
         htmlText = root.find('div', id = 'datalist_detail')
         #img
         imgs = htmlText.findAll('img')
-        if len(imgs) > 0:
-            if imgs[0]['src'][0:4] != 'http':
-                picurl = rootUrl + imgs[0]['src']
-            else:
-                picurl =  imgs[0]['src']
+	for item in imgs:
+		l = len(item['src'])
+		if(item['src'][l-4:l] == ".gif"):
+			continue
+            	if item['src'][0:4] != 'http':
+               		picurl = rootUrl + item['src']
+            	else:
+                	picurl =  item['src']
+        print picurl
         for img in imgs:
             img.parent.parent['style'] = 'line-height: 125%; text-align: center;'
             if img['src'][len(img['src'])-3: len(img['src'])] != 'gif':
@@ -296,13 +300,14 @@ def endFormat(val = ''):
     return val[0:end]
 
 try:
-    i = 0
-    #getTsinghuaNewsCharacter()
+    #i = 0
+    getTsinghuaNewsCharacter()
     #getTsinghuaNewsSynthesis()
 except:
     print "error occured in TsinghuaNewsNet"
 try:
-    getArtShowXML()
+    i = 0
+    #getArtShowXML()
 except:
     print "error occured in artshow"
 try:
