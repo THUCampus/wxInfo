@@ -345,7 +345,7 @@ getArtShowXML()
  #   print "error occured in artshow"
 try:
     i = 0
-    #getStudentTsinghuaNews()
+    getStudentTsinghuaNews()
 except:
     print "error occured in TsinghuaNews"
 '''
