@@ -7,6 +7,8 @@ from ExactQuery import *
 import time
 import random
 
+media_path = 'http://115.28.212.177:8000/static/img/upload/'
+
 class result_url:
     title = ''
     picurl = ''
@@ -37,7 +39,11 @@ def hot_activity():
     count = 0
     for each in activities:
         if each.act_time.strftime('%Y-%m-%d') >= time.strftime("%Y-%m-%d", time.localtime(time.time())):
-            List.append(result_url(title=each.title, picurl=each.picurl, url= local_url + 'activity/?id=' + str(each.id)))
+            str = each.picurl.name
+            if str[0:4] == 'http':
+                List.append(result_url(title=each.title, picurl=each.picurl, url= local_url + 'activity/?id=' + str(each.id)))
+            else:
+                List.append(result_url(title=each.title, picurl=media_path + each.picurl.name, url= local_url + 'activity/?id=' + str(each.id)))
             count += 1
         if count > 3:
             break
@@ -56,7 +62,7 @@ def recent_lecture():
             if str[0:4] == 'http':
                 List.append(result_url(title=each.title, picurl=each.picurl, url=local_url + 'lecture/?id=' + str(each.id)))
             else:
-                List.append(result_url(title=each.title, picurl='http://115.28.212.177:8000/static/img/upload/' + each.picurl, url=local_url + 'lecture/?id=' + str(each.id)))
+                List.append(result_url(title=each.title, picurl=media_path + each.picurl.name, url=local_url + 'lecture/?id=' + str(each.id)))
             count += 1
         if count > 3:
             break
