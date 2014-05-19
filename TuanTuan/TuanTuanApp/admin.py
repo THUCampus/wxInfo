@@ -33,7 +33,7 @@ admin.site.register(Lecture, LectureAdmin)
 
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'time', 'summary','stick','PicPreview')
-    list_filter = ('-time',)
+    list_filter = ('time',)
     ordering = ('-stick','-time',)
     search_fields = ('title','summary')
     formfield_overrides = {
