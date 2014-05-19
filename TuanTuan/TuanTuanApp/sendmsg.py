@@ -52,7 +52,11 @@ def recent_lecture():
     lectures = Lecture.objects.all().order_by('-stick','act_time')
     for each in lectures:
         if each.act_time.strftime('%Y-%m-%d') >= time.strftime("%Y-%m-%d", time.localtime(time.time())):
-            List.append(result_url(title=each.title, picurl=each.picurl, url=local_url + 'lecture/?id=' + str(each.id)))
+            str = each.picurl.name
+            if str[0:4] == 'http':
+                List.append(result_url(title=each.title, picurl=each.picurl, url=local_url + 'lecture/?id=' + str(each.id)))
+            else:
+                List.append(result_url(title=each.title, picurl='http://115.28.212.177:8000/static/img/upload/' + each.picurl, url=local_url + 'lecture/?id=' + str(each.id)))
             count += 1
         if count > 3:
             break
