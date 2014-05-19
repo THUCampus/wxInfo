@@ -20,7 +20,9 @@ from participle import *
 import time
 
 def getArtShowXML():
+    print "hehe"
     url = 'http://www.hall.tsinghua.edu.cn/column/pwzx_hdap'
+    rootUrl = 'http://www.hall.tsinghua.edu.cn'
     content = urllib2.urlopen(url).read()
     soup = bs4.BeautifulSoup(content)
     #find all <a> links
@@ -41,7 +43,23 @@ def getArtShowXML():
         root = bs4.BeautifulSoup(content)
         #contents in the 5th table
         table = root.html.find_all("div", class_="column_1")[0]
-        picurl = 'http://www.hall.tsinghua.edu.cn' + table.img['src']
+        picurl = rootUrl + table.img['src']
+        imgs = table.findAll('img')
+        imgs[0].extract()
+        imgs.remove(imgs[0])
+
+        for img in imgs:
+            img.parent['style'] = 'line-height: 125%; text-align: center;'
+            if img['src'][len(img['src'])-3: len(img['src'])] != 'gif':
+                img['style'] = "width:95%; border-radius: 8px; text-align: center;"
+                img['height'] = ""
+                img['width'] = ""
+            if img['src'][0:4] != 'http':
+                img['src'] = rootUrl + img['src']
+        pTags = table.findAll('p')
+        for p in pTags:
+            p['style'] = "line-height:25px;"
+	#table.img['src'] = 'http://www.hall.tsinghua.edu.cn' + table.img['src']
         acttitle = table.find_all("div", class_="xqy_p")[0].find_all("p")[1].text
 
         try:
@@ -55,18 +73,10 @@ def getArtShowXML():
             for dateitem in daystr:
                 date = dateitem.split("-")
                 year = date[0]
-		yl = len(year)
-		year = year[yl - 4:]
                 month = date[1]
                 days = date[2].split(" ")[0].split("/")
                 for item in days:
-		    it = item
-                    if len(item)> 2:
-			it = item[0]
-			if item[1]>= '0' and item[1] <='9':
-				it = it + item[1]
-			
-                    dates.append(year+"-"+month+"-"+it);
+                    dates.append(year+"-"+month+"-"+item);
             timeloc = curtime.find(":")
             time = curtime[timeloc-2:timeloc+3]
 
@@ -74,7 +84,7 @@ def getArtShowXML():
             for item in dates:
                 timearray.append(item + " "+time)
             site=table.find_all("li", class_="add")[0].text
-            val=table.text
+            val=table
 
 
             access_time = "1993-01-01"
@@ -84,43 +94,62 @@ def getArtShowXML():
             #print curtime.encode('utf-8')
             #print site.encode('utf-8')
             #print  ticket.encode('utf-8')
+	    print val
             for item in timearray:
-                #print item
-		#continue
-		activity = Activity.objects.filter(title=title, act_time=item)
+                activity = Activity.objects.filter(title=title, act_time=item)
                 if activity.count() == 0:
                   Activity.objects.create(title=title, picurl=picurl, access_time=access_time, act_time=item, site=site,
                         actor='', ticket=ticket, content = val, stick = 0)
         except Exception, data:
-            print "error insert data in activity"
-	    print title
+            continue
 
 
 def getTsinghuaNewsCharacter():
     rootUrl = 'http://news.tsinghua.edu.cn'
     urls = 'http://news.tsinghua.edu.cn/publish/news/4208/index.html'
+    print "world"
     indexPage = urllib2.urlopen(urls)
+    print "hello"
     indexContent = indexPage.read()
+    print "hhe"
     indexRoot = bs4.BeautifulSoup(indexContent)
     linklist = indexRoot.find('div', id = 'datalist_sec2').ul.findAll('li')
     for item in linklist:
         #title
         title = item.a.string.encode('utf-8')
-        print title
-	picurl = ''
+        picurl = ''
         tmpUrl = item.a['href']
         page = urllib2.urlopen(rootUrl + tmpUrl)
+        print "subhello"
         content = page.read()
         root = bs4.BeautifulSoup(content)
         #content
         htmlText = root.find('div', id = 'datalist_detail')
+
+        pTags = htmlText.findAll('p')
+        for p in pTags:
+            p['style'] += "line-height:25px;"
         #img
         imgs = htmlText.findAll('img')
-        if len(imgs) > 0:
-            if imgs[0]['src'][0:4] != 'http':
-                picurl = rootUrl + imgs[0]['src']
+        for item in imgs:
+            l = len(item['src'])
+            if(item['src'][l-4:l] == ".gif"):
+                continue
+            if item['src'][0:4] != 'http':
+                picurl = rootUrl + item['src']
+                break
             else:
-                picurl =  imgs[0]['src']
+                picurl =  item['src']
+                break
+            print picurl
+        for img in imgs:
+            img.parent['style'] = 'line-height: 125%; text-align: center;'
+            if img['src'][len(img['src'])-3: len(img['src'])] != 'gif':
+                img['style'] = "width:95%; border-radius: 8px; text-align: center;"
+                img['height'] = ""
+                img['width'] = ""
+            if img['src'][0:4] != 'http':
+                img['src'] = rootUrl + img['src']
         #summary
         summary = ''
         #time
@@ -149,13 +178,33 @@ def getTsinghuaNewsSynthesis():
         root = bs4.BeautifulSoup(content)
         #content
         htmlText = root.find('div', id = 'datalist_detail')
+
+
+        pTags = htmlText.findAll('p')
+        for p in pTags:
+            p['style'] += "line-height:25px;"
         #img
         imgs = htmlText.findAll('img')
-        if len(imgs) > 0:
-            if imgs[0]['src'][0:4] != 'http':
-                picurl = rootUrl + imgs[0]['src']
+        for item in imgs:
+            l = len(item['src'])
+            if(item['src'][l-4:l] == ".gif"):
+                continue
+            if item['src'][0:4] != 'http':
+                picurl = rootUrl + item['src']
+                break
             else:
-                picurl =  imgs[0]['src']
+                picurl =  item['src']
+                break
+            print picurl
+
+        for img in imgs:
+            img.parent['style'] = 'line-height: 125%; text-align: center;'
+            if img['src'][len(img['src'])-3: len(img['src'])] != 'gif':
+                img['style'] = "width:95%; border-radius: 8px; text-align: center;"
+                img['height'] = ""
+                img['width'] = ""
+            if img['src'][0:4] != 'http':
+                img['src'] = rootUrl + img['src']
         #summary
         summary = ''
         #time
@@ -284,17 +333,19 @@ def endFormat(val = ''):
     return val[0:end]
 
 try:
-    #a = 1
+    i = 0
     getTsinghuaNewsCharacter()
     getTsinghuaNewsSynthesis()
 except:
     print "error occured in TsinghuaNewsNet"
+#try:
+    #i = 0
+getArtShowXML()
+#except:
+ #   print "error occured in artshow"
 try:
-    getArtShowXML()
-except:
-    print "error occured in artshow"
-try:
-    getStudentTsinghuaNews()
+    i = 0
+    #getStudentTsinghuaNews()
 except:
     print "error occured in TsinghuaNews"
 '''
