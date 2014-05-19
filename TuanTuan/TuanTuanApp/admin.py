@@ -9,7 +9,7 @@ from django import forms
 class ActivityAdmin(admin.ModelAdmin):
     list_display = ('title', 'act_time', 'site','stick','PicPreview')
     list_filter = ('act_time',)
-    ordering = ('-stick', 'act_time',)
+    ordering = ('-stick', '-act_time',)
     search_fields = ('title',)
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 100})},
@@ -22,7 +22,7 @@ admin.site.register(Activity, ActivityAdmin)
 class LectureAdmin(admin.ModelAdmin):
     list_display = ('title', 'act_time', 'actor', 'site','stick','PicPreview')
     list_filter = ('act_time',)
-    ordering = ('-stick','act_time',)
+    ordering = ('-stick','-act_time',)
     search_fields = ('title', 'actor',)
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 100})},
@@ -33,7 +33,7 @@ admin.site.register(Lecture, LectureAdmin)
 
 class NewsAdmin(admin.ModelAdmin):
     list_display = ('title', 'time', 'summary','stick','PicPreview')
-    list_filter = ('time',)
+    list_filter = ('-time',)
     ordering = ('-stick','-time',)
     search_fields = ('title','summary')
     formfield_overrides = {

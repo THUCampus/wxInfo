@@ -52,7 +52,11 @@ def recent_lecture():
     lectures = Lecture.objects.all().order_by('-stick','act_time')
     for each in lectures:
         if each.act_time.strftime('%Y-%m-%d') >= time.strftime("%Y-%m-%d", time.localtime(time.time())):
-            List.append(result_url(title=each.title, picurl=each.picurl, url=local_url + 'lecture/?id=' + str(each.id)))
+            str = each.picurl.name
+            if str[0:4] == 'http':
+                List.append(result_url(title=each.title, picurl=each.picurl, url=local_url + 'lecture/?id=' + str(each.id)))
+            else:
+                List.append(result_url(title=each.title, picurl='http://115.28.212.177:8000/static/img/upload/' + each.picurl, url=local_url + 'lecture/?id=' + str(each.id)))
             count += 1
         if count > 3:
             break
@@ -239,5 +243,3 @@ def send_msg(request, xml):
     else:
         variables = RequestContext(request, {'to':_to, 'from':_from, 'time':int(time.time()),'type':'news', 'count': count, 'local_url':local_url, template_type: wei_data})
         return render_to_response('weixin_' + template_type + '.html', variables)
-
-
