@@ -79,7 +79,7 @@ def school_figure():
     List = []
     length = len(figures)
     if length == 0:
-        content = '对不起，目前没有人物信息'
+        content = '对不起，目前没有就业信息'
         template_type = 'text'
     elif length == 1:
         count = 1
