@@ -111,9 +111,15 @@ def getTsinghuaCareerCenter():
     indexContent = indexPage.read()
     indexRoot = bs4.BeautifulSoup(indexContent)
     linklist = indexRoot.find('div', {"class": "chapter1"}).ul.findAll('li')
+	iter = 0
+	picurls = ['http://careertipsinfo.com/wp-content/uploads/2009/12/Career-Changes.jpg', 
+			'http://news.xd56b.com/gtsc/20110912/SC0912-A3_1.jpg', 
+			'http://img.taopic.com/uploads/allimg/130725/318765-130H5091R696.jpg',
+			'http://www.albiz.cn:88/imgMsg88/201312/20131221085222784.jpg',
+			'http://www.ganqi.com/Images/KE/image/20120510/20120510085316_78015.jpg']
     for item in linklist:
         #title
-        picurl = 'http://careertipsinfo.com/wp-content/uploads/2009/12/Career-Changes.jpg'
+		picurl = picurls[iter%len(picurls)]
         title = item.p.a.contents[0]
         if(title[0:4] == u'[置顶]'):
             stick = 1
