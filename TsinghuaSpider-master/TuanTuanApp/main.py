@@ -104,6 +104,50 @@ def getArtShowXML():
         except Exception, data:
             continue
 
+def getTsinghuaCareerCenter():
+    rootUrl = 'http://career.tsinghua.edu.cn'
+    urls = 'http://career.tsinghua.edu.cn/publish/career/8130/index.html'
+    indexPage = urllib2.urlopen(urls)
+    indexContent = indexPage.read()
+    indexRoot = bs4.BeautifulSoup(indexContent)
+    linklist = indexRoot.find('div', {"class": "chapter1"}).ul.findAll('li')
+    for item in linklist:
+        #title
+        picurl = 'http://careertipsinfo.com/wp-content/uploads/2009/12/Career-Changes.jpg'
+        title = item.p.a.contents[0]
+        if(title[0:4] == u'[置顶]'):
+            stick = 1
+            title = title[4:len(title)]
+        else:
+            stick = 0
+        title = title.encode('utf-8')
+        tmpUrl = item.p.a['href']
+        page = urllib2.urlopen(rootUrl + tmpUrl)
+        content = page.read()
+        root = bs4.BeautifulSoup(content)
+        #content
+        htmlText = root.find('div', {"class" : "chapter"})
+
+        imgs = htmlText.findAll('img')
+        for item in imgs:
+            l = len(item['src'])
+            if(item['src'][l-4:l] == ".gif"):
+                continue
+            if item['src'][0:4] != 'http':
+                picurl = rootUrl + item['src']
+                break
+            else:
+                picurl =  item['src']
+                break
+
+        content = str(htmlText)
+        cr = ModernFigure.objects.filter(title=title)
+        if len(cr) == 0:
+            try:
+                ModernFigure.objects.create(title=title, content=content, picurl=picurl, stick=stick)
+                print title
+            except Exception, data:
+                print "error"
 
 def getTsinghuaNewsCharacter():
     rootUrl = 'http://news.tsinghua.edu.cn'
@@ -346,23 +390,24 @@ def endFormat(val = ''):
 #except:
 #   print "error occured in TsinghuaNewsNet"
 try:
-    print "hello"
     getArtShowXML()
-    print "world"
 except:
     print "error occured in artshow"
+    
 try:
-    print "hello"
+    getTsinghuaCareerCenter()
+except:
+    print "error occured in career"
+    
+try:
     getStudentTsinghuaNews()
-    print "world"
-    i = 0
     getTsinghuaNewsCharacter()
     getTsinghuaNewsSynthesis()
 except:
     print "error occured in TsinghuaNewsNet"
 #try:
     #i = 0
-getArtShowXML()
+#getArtShowXML()
 #except:
  #   print "error occured in artshow"
 try:
