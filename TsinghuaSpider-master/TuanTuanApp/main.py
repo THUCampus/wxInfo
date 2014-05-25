@@ -125,6 +125,7 @@ def getTsinghuaCareerCenter():
     for item in linklist:
         #title
         picurl = picurls[iter%len(picurls)]
+        iter = iter + 1
         title = item.p.a.contents[0]
         if(title[0:4] == u'[置顶]'):
             stick = 1
