@@ -129,7 +129,11 @@ def getTsinghuaNewsCharacter():
 
         pTags = htmlText.findAll('p')
         for p in pTags:
-            p['style'] += "line-height:25px;"
+            if 'style' not in p.attrs.keys():
+                p['style'] = 'line-height:25px;'
+            else:
+
+                p['style'] += "line-height:25px;"
         #img
         imgs = htmlText.findAll('img')
         for item in imgs:
@@ -184,7 +188,11 @@ def getTsinghuaNewsSynthesis():
 
         pTags = htmlText.findAll('p')
         for p in pTags:
-            p['style'] += "line-height:25px;"
+            if 'style' not in p.attrs.keys():
+                p['style'] = 'line-height:25px;'
+            else:
+
+                p['style'] += "line-height:25px;"
         #img
         imgs = htmlText.findAll('img')
         for item in imgs:
@@ -338,38 +346,17 @@ def endFormat(val = ''):
     if end == -1:
         end == len(val)
     return val[0:end]
-
-
-#try:
-#    getTsinghuaNewsCharacter()
-#    getTsinghuaNewsSynthesis()
-#except:
-#   print "error occured in TsinghuaNewsNet"
 try:
-    print "hello"
-    getArtShowXML()
-    print "world"
-except:
-    print "error occured in artshow"
-try:
-    print "hello"
-    getStudentTsinghuaNews()
-    print "world"
-    i = 0
     getTsinghuaNewsCharacter()
     getTsinghuaNewsSynthesis()
 except:
     print "error occured in TsinghuaNewsNet"
-#try:
-    #i = 0
-getArtShowXML()
-#except:
- #   print "error occured in artshow"
 try:
-    i = 0
-    #getStudentTsinghuaNews()
+
+    getArtShowXML()
 except:
-    print "error occured in TsinghuaNews"
+   print "error occured in artshow"
+
 '''
 try:
     getTsinghuaLecture()
