@@ -119,7 +119,9 @@ def getTsinghuaCareerCenter():
 			'http://www.ganqi.com/Images/KE/image/20120510/20120510085316_78015.jpg',
 			'http://img.article.pchome.net/00/40/94/87/pic_lib/s960x639/office_3006s960x639.jpg',
 			'http://www.bkoa.cn/uFile/2849/20112229935318.jpg',
-			'http://wp1.sina.cn/woriginal/70f7d973jw1e3ahp0pgetj.jpg']
+			'http://wp1.sina.cn/woriginal/70f7d973jw1e3ahp0pgetj.jpg',
+			'http://www.yan168.com/uploadfiles/pic/20100813131115416A.jpg',
+			'http://imgs.ebrun.com/resources/2011_06/2011_06_30/201106304571309398970171.jpg']
     for item in linklist:
         #title
 		picurl = picurls[iter%len(picurls)]
