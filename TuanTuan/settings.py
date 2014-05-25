@@ -94,6 +94,8 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'hgvdka@s_9me@t^0*ivq!#$ni!rv5=cdnudlfd#0s13d7732!7'
 
+DEFAULT_FILE_STORAGE = 'TuanTuanApp.storage.ASCIIFileSystemStorage'
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
