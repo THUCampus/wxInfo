@@ -96,16 +96,16 @@ def school_figure():
         count = 1
         wei_data = figures[0]
         template_type = 'figure'
-    elif length < 3:
+    elif length < 5:
         count = length
         template_type = 'list'
         for figure in figures:
             List.append(result_url(title=figure.title, picurl=figure.picurl, url=local_url + 'figure/?id=' + str(figure.id)))
     else:
-        count = 3
+        count = 5
         template_type = 'list'
         figure_list = range(0,length)
-        figureId = random.sample(figure_list, 3)
+        figureId = random.sample(figure_list, 5)
         for id in figureId:
             figure = figures[id]
             List.append(result_url(title=figure.title, picurl=figure.picurl, url=local_url + 'figure/?id=' + str(figure.id)))
