@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.shortcuts import redirect
 from TuanTuanApp.views import *
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
@@ -7,7 +8,7 @@ from TuanTuan import settings
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', entry),
+    url(r'^$', redirect('http://student.tsinghua.edu.cn')),
     url(r'^activity/$',activity_page),
     url(r'^lecture/$',lecture_page),
     url(r'^news/$',news_page),
