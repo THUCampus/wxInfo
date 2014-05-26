@@ -2,6 +2,7 @@
 from django.http import HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response
+from django.http import HttpResponseRedirect
 from handle import *
 import hashlib
 import xml.etree.ElementTree as ET
@@ -36,7 +37,7 @@ def entry(request):
         else:
             return HttpResponse('false')
     else:
-        return render_to_response('test.html',RequestContext(request))
+         return HttpResponseRedirect("http://student.tsinghua.edu.cn/")
 
 #活动界面逻辑与渲染
 def activity_page(request):

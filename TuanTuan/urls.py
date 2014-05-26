@@ -8,7 +8,7 @@ from TuanTuan import settings
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^$', redirect('http://student.tsinghua.edu.cn')),
+    url(r'^$', entry),
     url(r'^activity/$',activity_page),
     url(r'^lecture/$',lecture_page),
     url(r'^news/$',news_page),
