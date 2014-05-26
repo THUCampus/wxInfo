@@ -99,15 +99,22 @@ class ModernFigure(models.Model):
         (2,'2'),
         (3,'3'),
     )
-    title = models.CharField(_(u'人物标题'), max_length = 255,unique=True)
+    title = models.CharField(_(u'就业标题'), max_length = 255,unique=True)
     stick = models.SmallIntegerField(_(u'置顶'),choices=PRIORITY,default=0)
-    picurl = models.CharField(_(u'图片'), max_length = 100, blank=True, null=True)
+    picurl = models.ImageField(_(u'预览图片'), upload_to="uploads",)
+    def PicPreview(self):
+        str = self.picurl.name
+        if str[0:4] != 'http':
+            return '<img src="' + MEDIA_URL + '%s" width="200px"/>' % self.picurl
+        else:
+            return '<img src="%s" width="200px"/>' % self.picurl
+    PicPreview.allow_tags = True 
     content = RichTextField(_(u'详细内容'),max_length = 20000)
     def __unicode__(self):
         return u'%s' % (self.picurl)
     class Meta:
-        verbose_name = _(u'校园人物')
-        verbose_name_plural = _(u'校园人物')
+        verbose_name = _(u'就业信息')
+        verbose_name_plural = _(u'就业信息')
 
 class Club(models.Model):
     PRIORITY = (
