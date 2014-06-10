@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.shortcuts import redirect
 from TuanTuanApp.views import *
 from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns

@@ -18,7 +18,7 @@ import string
 from TuanTuanApp.models import *
 from participle import *
 import time
-
+import datetime
 def getArtShowXML():
     print "hehe"
     url = 'http://www.hall.tsinghua.edu.cn/column/pwzx_hdap'
@@ -91,7 +91,8 @@ def getArtShowXML():
             #print title.encode('utf-8')
             #print picurl
             #print access_time
-            #print curtime.encode('utf-8')
+            #print "\n"
+	    #print curtime.encode('utf-8')
             #print site.encode('utf-8')
             #print  ticket.encode('utf-8')
 	    print val
@@ -103,6 +104,62 @@ def getArtShowXML():
         except Exception, data:
             continue
 
+def getTsinghuaCareerCenter():
+    rootUrl = 'http://career.tsinghua.edu.cn'
+    urls = 'http://career.tsinghua.edu.cn/publish/career/8130/index.html'
+    indexPage = urllib2.urlopen(urls)
+    indexContent = indexPage.read()
+    indexRoot = bs4.BeautifulSoup(indexContent)
+    linklist = indexRoot.find('div', {"class": "chapter1"}).ul.findAll('li')
+    iter = 0
+    picurls = ['http://careertipsinfo.com/wp-content/uploads/2009/12/Career-Changes.jpg',
+			'http://news.xd56b.com/gtsc/20110912/SC0912-A3_1.jpg', 
+			'http://img.taopic.com/uploads/allimg/130725/318765-130H5091R696.jpg',
+			'http://www.albiz.cn:88/imgMsg88/201312/20131221085222784.jpg',
+			'http://www.ganqi.com/Images/KE/image/20120510/20120510085316_78015.jpg',
+			'http://img.article.pchome.net/00/40/94/87/pic_lib/s960x639/office_3006s960x639.jpg',
+			'http://www.bkoa.cn/uFile/2849/20112229935318.jpg',
+			'http://wp1.sina.cn/woriginal/70f7d973jw1e3ahp0pgetj.jpg',
+			'http://www.yan168.com/uploadfiles/pic/20100813131115416A.jpg',
+			'http://imgs.ebrun.com/resources/2011_06/2011_06_30/201106304571309398970171.jpg']
+    for item in linklist:
+        #title
+        picurl = picurls[iter%len(picurls)]
+        iter = iter + 1
+        title = item.p.a.contents[0]
+        if(title[0:4] == u'[置顶]'):
+            stick = 1
+            title = title[4:len(title)]
+        else:
+            stick = 0
+        title = title.encode('utf-8')
+        tmpUrl = item.p.a['href']
+        page = urllib2.urlopen(rootUrl + tmpUrl)
+        content = page.read()
+        root = bs4.BeautifulSoup(content)
+        #content
+        htmlText = root.find('div', {"class" : "chapter"})
+
+        imgs = htmlText.findAll('img')
+        for item in imgs:
+            l = len(item['src'])
+            if(item['src'][l-4:l] == ".gif"):
+                continue
+            if item['src'][0:4] != 'http':
+                picurl = rootUrl + item['src']
+                break
+            else:
+                picurl =  item['src']
+                break
+
+        content = str(htmlText)
+        cr = ModernFigure.objects.filter(title=title)
+        if len(cr) == 0:
+            try:
+                ModernFigure.objects.create(title=title, content=content, picurl=picurl, stick=stick)
+                print title
+            except Exception, data:
+                print "error"
 
 def getTsinghuaNewsCharacter():
     rootUrl = 'http://news.tsinghua.edu.cn'
@@ -128,10 +185,11 @@ def getTsinghuaNewsCharacter():
 
         pTags = htmlText.findAll('p')
         for p in pTags:
-	    try:
-                 p['style'] = p['style'] +  "line-height:25px;"
-	    except :
-                 p['style'] = 'line-height:25px;'
+            if 'style' not in p.attrs.keys():
+                p['style'] = 'line-height:25px;'
+            else:
+
+                p['style'] += "line-height:25px;"
         #img
         imgs = htmlText.findAll('img')
         for item in imgs:
@@ -158,10 +216,11 @@ def getTsinghuaNewsCharacter():
         #time
         timeString =  root.find('div', id = 'title_detail_picwriter').string[4:14]
         news = News.objects.filter(title=title)
+	print "insert one element"
         if len(news) == 0:
             try:
                 News.objects.create(title=title, content=htmlText.encode('utf-8'), picurl=picurl, time=timeString, summary=summary, stick = 0)
-            except Exception, data:
+            except:
                 print "error"
 
 def getTsinghuaNewsSynthesis():
@@ -185,10 +244,11 @@ def getTsinghuaNewsSynthesis():
 
         pTags = htmlText.findAll('p')
         for p in pTags:
-	    try:
-                p['style'] += "line-height:25px;"
-            except:
+            if 'style' not in p.attrs.keys():
                 p['style'] = 'line-height:25px;'
+            else:
+
+                p['style'] += "line-height:25px;"
         #img
         imgs = htmlText.findAll('img')
         for item in imgs:
@@ -224,6 +284,7 @@ def getTsinghuaNewsSynthesis():
 
 def getStudentTsinghuaNews():
     d1 = datetime.datetime.now()
+    #print "time"
     d3 = d1 - datetime.timedelta(days = 20)
     url1 = 'http://166.111.17.5:8080/getNews?'
     urlparam = {
@@ -231,17 +292,21 @@ def getStudentTsinghuaNews():
         'end_time':d1.strftime('%Y-%m-%d %H:%M:%S'),
         'valid_code':'tuanwei'
     }
+    print url1
     sd = urllib.urlencode(urlparam)
     url2 = url1 + sd
+    print url2
     page = urllib2.urlopen(url2)
-
+    print url2
     #page = urllib2.urlopen('''http://166.111.17.5:8080/getNews?start_time=2013-11-10%2000:00:00&end_time=2013-12-21%2000:00:00&valid_code=tuanwei''')
     content = page.read()
     json_read = json.loads(content)
+    print content
     if(json_read['result'] == 'success'):
 
         for item in json_read['news']:
             title = item['title'].encode('utf-8')
+            print title
             content = item['content'].encode('utf-8')
             time = item['updatetime'].split('T')[0]
             summary = item['newAbstract'].encode('utf-8')
@@ -342,24 +407,25 @@ def endFormat(val = ''):
 
 #try:
 #i = 0
-getTsinghuaNewsCharacter()
-getTsinghuaNewsSynthesis()
+while True:
+    getTsinghuaNewsCharacter()
+    getTsinghuaNewsSynthesis()
 #except:
  #   print "error occured in TsinghuaNewsNet"
 #try:
     #i = 0
-getArtShowXML()
+    getArtShowXML()
 #except:
  #   print "error occured in artshow"
-try:
-    i = 0
-    getStudentTsinghuaNews()
-except:
-    print "error occured in TsinghuaNews"
+    try:
+        i = 0
+        getStudentTsinghuaNews()
+    except:
+        print "error occured in TsinghuaNews"
+    time.sleep(3600 * 24 * 3)
 '''
 try:
     getTsinghuaLecture()
 except:
     print "error occured in Lectures"
 '''
-deleteAllData()

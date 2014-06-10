@@ -21,22 +21,11 @@ if 'SERVER_SOFTWARE' in os.environ:
             'PORT': '4050',                      # Set to empty string for default. Not used with sqlite3.
             }
     }
-elif (os.environ.get('USER', '') == 'ssastadmin') or ('SSAST_DEPLOYMENT' in os.environ):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'tuantuan',
-            'USER': 'root',
-            'PASSWORD': '123456789',
-            'HOST': '115.28.212.177',
-            'PORT': '',
-            }
-    }
 else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'
-            'NAME': 'test',        # Or path to database file if using sqlite3.
+            'NAME': 'tuantuan',        # Or path to database file if using sqlite3.
             'USER': 'root',                      # Not used with sqlite3.
             'PASSWORD': '123456789',                  # Not used with sqlite3.
             'HOST': '115.28.212.177',                      # Set to empty string for localhost. Not used with sqlite3.

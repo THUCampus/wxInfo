@@ -33,7 +33,7 @@ def handle_text(msg):
         school_club()
     elif msg == u'部门':
         school_department()
-    elif msg == u'人物':
+    elif msg == u'就业':
         school_figure()
     #其他Query分析
     else:

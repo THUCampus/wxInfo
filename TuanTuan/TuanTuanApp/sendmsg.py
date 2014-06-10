@@ -7,6 +7,8 @@ from ExactQuery import *
 import time
 import random
 
+media_path = 'http://115.28.212.177:8000/static/img/upload/'
+
 class result_url:
     title = ''
     picurl = ''
@@ -37,7 +39,10 @@ def hot_activity():
     count = 0
     for each in activities:
         if each.act_time.strftime('%Y-%m-%d') >= time.strftime("%Y-%m-%d", time.localtime(time.time())):
-            List.append(result_url(title=each.title, picurl=each.picurl, url= local_url + 'activity/?id=' + str(each.id)))
+            if each.picurl.name[0:4] != 'http':
+                List.append(result_url(title=each.title, picurl=media_path + each.picurl.name, url= local_url + 'activity/?id=' + str(each.id)))
+            else:
+                List.append(result_url(title=each.title, picurl=each.picurl, url= local_url + 'activity/?id=' + str(each.id)))
             count += 1
         if count > 3:
             break
@@ -52,7 +57,10 @@ def recent_lecture():
     lectures = Lecture.objects.all().order_by('-stick','act_time')
     for each in lectures:
         if each.act_time.strftime('%Y-%m-%d') >= time.strftime("%Y-%m-%d", time.localtime(time.time())):
-            List.append(result_url(title=each.title, picurl=each.picurl, url=local_url + 'lecture/?id=' + str(each.id)))
+            if each.picurl.name[0:4] != 'http':
+                List.append(result_url(title=each.title, picurl=media_path + each.picurl.name, url=local_url + 'lecture/?id=' + str(each.id)))
+            else:
+	    	List.append(result_url(title=each.title, picurl=each.picurl,  url=local_url + 'lecture/?id=' + str(each.id)))
             count += 1
         if count > 3:
             break
@@ -66,8 +74,11 @@ def school_news():
     List = []
     count = 0
     for each in news:
-        if each.time.strftime('%Y-%m-%d') <= time.strftime("%Y-%m-%d", time.localtime(time.time())):
-            List.append(result_url(title=each.title, picurl=each.picurl, url=local_url + 'news/?id=' + str(each.id)))
+        if each.time.strftime('%Y-%m-%d') <= time.strftime("%Y-%m-%d", time.localtime(time.time())): 
+            if each.picurl.name[0:4] != 'http':
+		List.append(result_url(title=each.title, picurl=media_path + each.picurl.name, url=local_url + 'news/?id=' + str(each.id)))
+	    else:	
+		List.append(result_url(title=each.title, picurl=each.picurl, url=local_url + 'news/?id=' + str(each.id)))
             count += 1
         if count > 4:
             break
@@ -79,22 +90,22 @@ def school_figure():
     List = []
     length = len(figures)
     if length == 0:
-        content = '对不起，目前没有人物信息'
+        content = '对不起，目前没有就业信息'
         template_type = 'text'
     elif length == 1:
         count = 1
         wei_data = figures[0]
         template_type = 'figure'
-    elif length < 3:
+    elif length < 5:
         count = length
         template_type = 'list'
         for figure in figures:
             List.append(result_url(title=figure.title, picurl=figure.picurl, url=local_url + 'figure/?id=' + str(figure.id)))
     else:
-        count = 3
+        count = 5
         template_type = 'list'
         figure_list = range(0,length)
-        figureId = random.sample(figure_list, 3)
+        figureId = random.sample(figure_list, 5)
         for id in figureId:
             figure = figures[id]
             List.append(result_url(title=figure.title, picurl=figure.picurl, url=local_url + 'figure/?id=' + str(figure.id)))
@@ -108,7 +119,10 @@ def school_club():
         count = length
         template_type = 'list'
         for club in clubs:
-            List.append(result_url(title=club.name, picurl= club.picurl, url=local_url + 'club/?id=' + str(club.id)))
+            if each.picurl.name[0:4] != 'http':
+		List.append(result_url(title=club.name, picurl=media_path +  club.picurl.name, url=local_url + 'club/?id=' + str(club.id)))
+	    else:	
+		List.append(result_url(title=club.name, picurl= club.picurl, url=local_url + 'club/?id=' + str(club.id)))
     else:
         count = 0
         template_type = 'list'
