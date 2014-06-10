@@ -128,7 +128,10 @@ def getTsinghuaNewsCharacter():
 
         pTags = htmlText.findAll('p')
         for p in pTags:
-            p['style'] += "line-height:25px;"
+	    try:
+                 p['style'] = p['style'] +  "line-height:25px;"
+	    except :
+                 p['style'] = 'line-height:25px;'
         #img
         imgs = htmlText.findAll('img')
         for item in imgs:
@@ -182,7 +185,10 @@ def getTsinghuaNewsSynthesis():
 
         pTags = htmlText.findAll('p')
         for p in pTags:
-            p['style'] += "line-height:25px;"
+	    try:
+                p['style'] += "line-height:25px;"
+            except:
+                p['style'] = 'line-height:25px;'
         #img
         imgs = htmlText.findAll('img')
         for item in imgs:
@@ -253,8 +259,10 @@ def getStudentTsinghuaNews():
                 if len(pimg) != 0:
                     p['style'] += '; text-indent:0px'
             imgs = soup.find_all('img')
+		
             if len(imgs) > 0:
-                if imgs[0]['src'][0:4] != 'http':
+                print imgs[0]['src']
+		if imgs[0]['src'][0:4] != 'http':
                     picurl = 'http://student.tsinghua.edu.cn' + imgs[0]['src']
                 else:
                     picurl =  imgs[0]['src']
@@ -332,12 +340,12 @@ def endFormat(val = ''):
         end == len(val)
     return val[0:end]
 
-try:
-    i = 0
-    getTsinghuaNewsCharacter()
-    getTsinghuaNewsSynthesis()
-except:
-    print "error occured in TsinghuaNewsNet"
+#try:
+#i = 0
+getTsinghuaNewsCharacter()
+getTsinghuaNewsSynthesis()
+#except:
+ #   print "error occured in TsinghuaNewsNet"
 #try:
     #i = 0
 getArtShowXML()
