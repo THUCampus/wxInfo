@@ -324,8 +324,10 @@ def getStudentTsinghuaNews():
                 if len(pimg) != 0:
                     p['style'] += '; text-indent:0px'
             imgs = soup.find_all('img')
+		
             if len(imgs) > 0:
-                if imgs[0]['src'][0:4] != 'http':
+                print imgs[0]['src']
+		if imgs[0]['src'][0:4] != 'http':
                     picurl = 'http://student.tsinghua.edu.cn' + imgs[0]['src']
                 else:
                     picurl =  imgs[0]['src']
@@ -403,32 +405,24 @@ def endFormat(val = ''):
         end == len(val)
     return val[0:end]
 
-
 #try:
-#    getTsinghuaNewsCharacter()
-#    getTsinghuaNewsSynthesis()
-#except:
-#   print "error occured in TsinghuaNewsNet"
-try:
-    getArtShowXML()
-except:
-    print "error occured in artshow"
-    
-try:
-    getTsinghuaCareerCenter()
-except:
-    print "error occured in career"
-    
-try:
-    getStudentTsinghuaNews()
-
+#i = 0
+while True:
     getTsinghuaNewsCharacter()
     getTsinghuaNewsSynthesis()
-except:
-    print "error occured in TsinghuaNewsNet"
-
-
-
+#except:
+ #   print "error occured in TsinghuaNewsNet"
+#try:
+    #i = 0
+    getArtShowXML()
+#except:
+ #   print "error occured in artshow"
+    try:
+        i = 0
+        getStudentTsinghuaNews()
+    except:
+        print "error occured in TsinghuaNews"
+    time.sleep(3600 * 24 * 3)
 '''
 try:
     getTsinghuaLecture()
