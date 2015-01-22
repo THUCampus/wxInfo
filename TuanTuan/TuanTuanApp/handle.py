@@ -18,7 +18,7 @@ def handle_click(key):
     #社团和部门信息
     elif key == 'V1001_OGNIZATION':
         school_club()
-    elif key == 'V1001_MODERN_FIGURE':
+    elif key == 'V1001_JOB':
         school_figure()
 
 #用户输入文字信息处理

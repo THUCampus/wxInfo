@@ -9,6 +9,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', entry),
+    url(r'^weixin$', entry),
     url(r'^activity/$',activity_page),
     url(r'^lecture/$',lecture_page),
     url(r'^news/$',news_page),

@@ -408,18 +408,12 @@ def endFormat(val = ''):
 #try:
 #i = 0
 while True:
-    getTsinghuaNewsCharacter()
-    getTsinghuaNewsSynthesis()
-#except:
- #   print "error occured in TsinghuaNewsNet"
-#try:
-    #i = 0
-    getArtShowXML()
-#except:
- #   print "error occured in artshow"
     try:
         i = 0
+        getTsinghuaCareerCenter()
         getStudentTsinghuaNews()
+        getTsinghuaNewsCharacter()
+        getTsinghuaNewsSynthesis()
     except:
         print "error occured in TsinghuaNews"
     time.sleep(3600 * 24 * 3)

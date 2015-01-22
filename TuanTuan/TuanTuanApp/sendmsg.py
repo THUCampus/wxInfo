@@ -141,8 +141,6 @@ def school_club():
                 count += 1
                 club = clubs[id]
                 List.append(result_url(title=club.name, picurl=club.picurl, url=local_url + 'club/?id=' + str(club.id)))
-    List.append(result_url(title='获取更多社团协会', picurl='', url='http://tuan.ssast.org/u/helpclub/'))
-    count += 1
 
 def school_department():
     global count, template_type, content, List, wei_data

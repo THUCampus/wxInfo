@@ -12,7 +12,7 @@ def validate(request):
     signature =  request.GET.get("signature")
     timestamp = request.GET.get("timestamp")
     nonce = request.GET.get("nonce")
-    token = 'TsinghuaChatToken'
+    token = 'TsinghuaChatToken' # TODO: replace with real token
     tmpArr = [token, timestamp, nonce]
     tmpArr.sort()
     tmpStr = ''.join(tmpArr)
